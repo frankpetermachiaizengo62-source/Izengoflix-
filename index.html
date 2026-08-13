@@ -21,4 +21,78 @@
   .filter-btn { background: #111; color: #bbb; border: 1px solid #333; padding: 12px 24px; border-radius: 30px; cursor: pointer; font-weight: 600; transition: 0.3s; }
   .filter-btn.active, .filter-btn:hover { background: #e50914; color: white; border-color: #e50914; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 30px; }
-  .card { background: #111; border-radius: 15
+  .card { background: #111; border-radius: 15px; overflow: hidden; transition: 0.4s; border: 1px solid #1a1a1a; position: relative; }
+  .card:hover { transform: translateY(-10px); border-color: #e50914; box-shadow: 0 15px 40px rgba(229, 9, 20, 0.4); }
+  .card img { width: 100%; height: 350px; object-fit: cover; }
+  .badge { position: absolute; top: 15px; left: 15px; background: #e50914; padding: 7px 14px; border-radius: 6px; font-size: 11px; font-weight: 700; z-index:2; }
+  .badge.new { background: #00ff88; color: #000; }
+  .card-info { padding: 18px; }
+  .card-info h3 { margin: 5px 0; font-size: 18px; font-weight: 700; }
+  .meta { color: #888; font-size: 13px; }
+  .btn-group { display: flex; gap: 12px; margin-top: 15px; }
+  .btn-group button { flex: 1; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.3s; }
+  .btn-play { background: #e50914; color: white; }
+  .btn-download { background: #222; color: white; border: 1px solid #333; }
+  .music-player { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(10,10,10,0.95); padding: 20px 40px; display: flex; align-items: center; gap: 25px; border-top: 2px solid #e50914; z-index: 999; backdrop-filter: blur(20px); }
+  .music-player img { width: 70px; height: 70px; border-radius: 12px; object-fit: cover; }
+  .music-player audio { width: 100%; max-width: 600px; }
+  .loading, .error { text-align: center; padding: 50px; color: #aaa; font-size: 20px; grid-column: 1 / -1; }
+  .error { color: #ff4757; background: #1a0000; border: 1px solid #ff4757; border-radius: 10px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">IZENGOFLIX</div>
+  <p class="subtitle">Premium Movies & Music • Bongo to the World</p>
+</header>
+
+<div class="main-tabs">
+  <button class="tab-btn active" onclick="showPanel('movies', event)">🎬 MOVIES</button>
+  <button class="tab-btn" onclick="showPanel('music', event)">🎵 MUSIC</button>
+</div>
+
+<div id="moviesPanel" class="panel active">
+  <h2 style="text-align:center; margin-bottom:30px;">Movies Zitakuja Hapa</h2>
+</div>
+
+<div id="musicPanel" class="panel">
+  <div class="filter-buttons">
+    <button class="filter-btn active" onclick="filterMusic('all', event)">All Music</button>
+    <button class="filter-btn" onclick="filterMusic('bongo', event)">🇹🇿 Bongo</button>
+    <button class="filter-btn" onclick="filterMusic('africa', event)">🌍 Africa</button>
+    <button class="filter-btn" onclick="filterMusic('ulaya', event)">🌎 Ulaya</button>
+  </div>
+  <div id="musicGrid" class="grid">
+    <div class="loading">Inapakia nyimbo kutoka Supabase...</div>
+  </div>
+</div>
+
+<div id="musicPlayer" class="music-player" style="display:none;">
+  <img id="playerCover" src="" alt="">
+  <div style="flex:1;">
+    <h4 id="playerTitle">Title</h4>
+    <p id="playerArtist" style="color:#aaa;">Artist</p>
+    <audio id="audio" controls autoplay style="margin-top:8px; width:100%;"></audio>
+  </div>
+  <button onclick="closePlayer()" style="background:#e50914; color:white; border:none; padding:14px 20px; border-radius:10px; font-size:20px; cursor:pointer; font-weight:700;">✖</button>
+</div>
+
+<script>
+// ========= ⚠️ WEKA CREDENTIALS ZAKO HAPA =========
+const SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co'; // MFANO: https://kxvmrlpanggrcqlfvsvq.supabase.co
+const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY'; // NAKILI KUTOKA SUPABASE > SETTINGS > API
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let allSongs = [];
+
+document.addEventListener('DOMContentLoaded', loadSongs);
+
+async function loadSongs() {
+  // ANGALIA KAMA KEYS ZIMEWEKWA
+  if(SUPABASE_URL.includes('YOUR_PROJECT_ID')) {
+    document.getElementById('musicGrid').innerHTML = `<div class="error">❌ KOSA: Tafadhali weka SUPABASE_URL na SUPABASE_ANON_KEY zako kwenye line 118 na 119</div>`;
+    return;
+  }
+
+  const { data, error } = await
