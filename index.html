@@ -3,19 +3,162 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IzengoFlix</title>
+  <title>IzengoFlix - Movies & Series HD</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #000; color: white; text-align: center; padding: 50px; font-family: Arial; }
-    h1 { color: red; font-size: 50px; margin-bottom: 20px; }
-    .card { background: #111; padding: 30px; border-radius: 15px; display: inline-block; }
+    body { background: #000; color: white; font-family: Arial; }
+    
+    header { text-align: center; padding: 25px 20px; background: #111; position: sticky; top: 0; z-index: 10; }
+    header h1 { color: red; font-size: 35px; }
+    header p { color: #aaa; font-size: 14px; }
+
+    .filters { display: flex; gap: 10px; padding: 15px; overflow-x: auto; background: #0a0a0a; }
+    .filters button { 
+      background: #222; color: white; border: 1px solid #333; 
+      padding: 8px 15px; border-radius: 20px; cursor: pointer; 
+      white-space: nowrap; font-size: 13px;
+    }
+    .filters button.active, .filters button:hover { background: red; border-color: red; }
+
+    .section-title { padding: 20px 30px 10px; font-size: 20px; color: #fff; }
+    .grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+      gap: 15px; 
+      padding: 0 30px 30px; 
+    }
+    
+    .card { background: #111; border-radius: 8px; overflow: hidden; transition: 0.3s; position: relative; }
+    .card:hover { transform: scale(1.05); z-index: 2; }
+    .card img { width: 100%; height: 240px; object-fit: cover; }
+    
+    .badge { position: absolute; top: 8px; right: 8px; background: red; font-size: 10px; padding: 3px 6px; border-radius: 4px; font-weight: bold; }
+    .badge.hd { background: #00ff00; color: #000; }
+    .badge.dub { background: #ffaa00; color: #000; }
+    
+    .card-info { padding: 10px; }
+    .card-info h3 { font-size: 13px; margin-bottom: 5px; height: 35px; overflow: hidden; }
+    .card-info .meta { font-size: 11px; color: #aaa; }
+    .card-info button { 
+      width: 100%; background: red; color: white; border: none; 
+      padding: 7px; border-radius: 5px; cursor: pointer; margin-top: 8px; font-size: 12px;
+    }
+
+    @media(max-width: 600px){
+      .grid { grid-template-columns: repeat(3, 1fr); padding: 0 15px 20px; }
+      .section-title { padding: 15px 15px 10px; font-size: 18px; }
+    }
+    .hidden { display: none; }
   </style>
 </head>
 <body>
-  <h1>🔥 IZENGOFLIX 🔥</h1>
-  <div class="card">
-    <h2>Suzzanna: The Queen of Black Magic</h2>
-    <p>Tuko Live kutoka Morogoro!</p>
+  <header>
+    <h1>🔥 IZENGOFLIX 🔥</h1>
+    <p>Movies, Series, Katuni, HD + Zilizotafsiriwa</p>
+  </header>
+
+  <!-- FILTER BUTTONS -->
+  <div class="filters">
+    <button class="active" onclick="filterAll(this)">Zote</button>
+    <button onclick="filterCat('movie', this)">Movies</button>
+    <button onclick="filterCat('series', this)">Series</button>
+    <button onclick="filterCat('katuni', this)">Katuni</button>
+    <button onclick="filterCat('nollywood', this)">Nollywood</button>
+    <button onclick="filterCat('bollywood', this)">Bollywood</button>
+    <button onclick="filterCat('korea', this)">Korea/K-Drama</button>
+    <button onclick="filterCat('tanzania', this)">Bongo</button>
+    <button onclick="filterCat('hd', this)">HD</button>
+    <button onclick="filterCat('dub', this)">Zilizotafsiriwa</button>
   </div>
+
+  <!-- SECTION: TRENDING -->
+  <h2 class="section-title">🔥 Zinazotrend Wiki Hii</h2>
+  <div class="grid" id="movies-grid">
+    
+    <!-- KATUNI -->
+    <div class="card" data-cat="katuni">
+      <span class="badge hd">HD</span>
+      <img src="https://image.tmdb.org/t/p/w500/qNBAXBIQlnO4vOeE9IWGaH6Xot.jpg" alt="Katuni">
+      <div class="card-info">
+        <h3>Spider-Man: Into Spider-Verse</h3>
+        <p class="meta">Katuni | 2023</p>
+        <button>Tazama</button>
+      </div>
+    </div>
+
+    <!-- NOLLYWOOD -->
+    <div class="card" data-cat="nollywood movie">
+      <span class="badge dub">DUB</span>
+      <img src="https://image.tmdb.org/t/p/w500/8VtZcJ4pJ6vD2rH2iYx2Yv2kYv.jpg" alt="Nollywood">
+      <div class="card-info">
+        <h3>Living in Bondage 2</h3>
+        <p class="meta">Nollywood | 2019</p>
+        <button>Tazama</button>
+      </div>
+    </div>
+
+    <!-- BOLLYWOOD -->
+    <div class="card" data-cat="bollywood movie dub">
+      <span class="badge dub">DUB</span>
+      <img src="https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg" alt="Bollywood">
+      <div class="card-info">
+        <h3>RRR</h3>
+        <p class="meta">Bollywood | Tafsiriwa | 2022</p>
+        <button>Tazama</button>
+      </div>
+    </div>
+
+    <!-- KOREA -->
+    <div class="card" data-cat="korea series">
+      <span class="badge hd">HD</span>
+      <img src="https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg" alt="Korea">
+      <div class="card-info">
+        <h3>Squid Game S2</h3>
+        <p class="meta">K-Drama Series | 2024</p>
+        <button>Tazama</button>
+      </div>
+    </div>
+
+    <!-- BONGO/TANZANIA -->
+    <div class="card" data-cat="tanzania movie">
+      <img src="https://via.placeholder.com/160x240/222/fff?text=BONGO+MOVIE" alt="Bongo">
+      <div class="card-info">
+        <h3>Tanzania: Mapenzi ya Damu</h3>
+        <p class="meta">Bongo Movie | 2025</p>
+        <button>Tazama</button>
+      </div>
+    </div>
+
+    <!-- SERIES -->
+    <div class="card" data-cat="series movie hd">
+      <span class="badge hd">HD</span>
+      <img src="https://image.tmdb.org/t/p/w500/1XS1oqL89CdlZfvLhsjKdVQk2tP.jpg" alt="Series">
+      <div class="card-info">
+        <h3>Money Heist S5</h3>
+        <p class="meta">Series | HD | 2021</p>
+        <button>Tazama</button>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+function filterCat(category, btn) {
+  document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.card').forEach(card => {
+    if(card.dataset.cat.includes(category)) {
+      card.classList.remove('hidden');
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+}
+function filterAll(btn) {
+  document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.card').forEach(card => card.classList.remove('hidden'));
+}
+</script>
 </body>
 </html>
