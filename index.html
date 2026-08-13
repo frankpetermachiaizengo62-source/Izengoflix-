@@ -1,78 +1,340 @@
 <!DOCTYPE html>
 <html lang="sw">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IZENGOFLIX - Movies & Music</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IZENGOFLIX - Movies & Music</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { 
-    background: #000; 
-    color: white; 
-    font-family: 'Poppins', sans-serif; 
-    padding-bottom: 120px; 
-  }
-  
-  /* HEADER CLASSY */
-  header {
-    text-align: center;
-    padding: 50px 20px 30px;
-    background: linear-gradient(180deg, rgba(229,9,20,0.1) 0%, #000 100%);
-  }
-  .logo { 
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 80px; 
-    font-weight: 400;
-    letter-spacing: 8px;
-    background: linear-gradient(90deg, #e50914, #ff4757, #e50914);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-size: 200% auto;
-    animation: shine 3s linear infinite;
-    text-shadow: 0 0 40px rgba(229, 9, 20, 0.4);
-  }
-  @keyframes shine {
-    to { background-position: 200% center; }
-  }
-  .subtitle { 
-    color: #aaa; 
-    font-size: 15px; 
-    margin-top: 8px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
+    
+    body { 
+      background: #08080a; 
+      color: #ffffff; 
+      font-family: 'Poppins', sans-serif; 
+      padding-bottom: 80px; 
+    }
+    
+    /* HEADER CLASSY */
+    header {
+      text-align: center;
+      padding: 60px 20px 40px;
+      background: linear-gradient(180deg, rgba(229,9,20,0.15) 0%, rgba(8,8,10,1) 100%);
+    }
+    
+    .logo { 
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(50px, 8vw, 90px); 
+      font-weight: 400;
+      letter-spacing: 6px;
+      background: linear-gradient(90deg, #e50914, #ff4757, #e50914);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 200% auto;
+      animation: shine 4s linear infinite;
+      filter: drop-shadow(0 0 25px rgba(229, 9, 20, 0.4));
+    }
+    
+    @keyframes shine {
+      to { background-position: 200% center; }
+    }
+    
+    .subtitle { 
+      color: #888; 
+      font-size: 14px; 
+      margin-top: 5px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
 
-  /* MAIN TABS PREMIUM */
-  .main-tabs {
-    display: flex;
-    justify-content: center;
-    gap: 0;
-    background: #0a0a0a;
-    border-bottom: 1px solid #222;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-  .tab-btn {
-    background: none;
-    border: none;
-    color: #666;
-    font-size: 20px;
-    font-weight: 700;
-    padding: 20px 60px;
-    cursor: pointer;
-    transition: 0.3s;
-    font-family: 'Poppins';
-    letter-spacing: 1px;
-  }
-  .tab-btn.active { 
-    color: white; 
-    border-bottom: 3px solid #e50914; 
-    background: #111;
-  }
-  .tab-btn:hover { color: white; }
-  
-  /* PANELS */
-  .panel { display: none; padding: 40px 30px; max-width: 1500px; margin: auto; }
-  .panel.active { display
+    /* MAIN NAVIGATION TABS */
+    .main-tabs {
+      display: flex;
+      justify-content: center;
+      background: rgba(15, 15, 20, 0.8);
+      backdrop-filter: blur(15px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .tab-btn {
+      background: none;
+      border: none;
+      color: #777;
+      font-size: 16px;
+      font-weight: 600;
+      padding: 18px 40px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+      letter-spacing: 1px;
+    }
+    
+    .tab-btn.active { 
+      color: #fff; 
+      border-bottom: 3px solid #e50914; 
+      background: rgba(229, 9, 20, 0.05);
+    }
+    
+    .tab-btn:hover { color: #fff; }
+
+    /* PANELS */
+    .panel { 
+      display: none; 
+      padding: 30px 20px; 
+      max-width: 1400px; 
+      margin: auto; 
+    }
+    .panel.active { display: block; }
+
+    /* CATEGORY PILLS */
+    .sub-categories {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 15px;
+      margin-bottom: 30px;
+      scrollbar-width: none; /* Hide scrollbar Firefox */
+    }
+    .sub-categories::-webkit-scrollbar { display: none; } /* Hide scrollbar Chrome/Safari */
+
+    .pill {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #ccc;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 13px;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .pill.active, .pill:hover {
+      background: #e50914;
+      color: #fff;
+      border-color: #e50914;
+      box-shadow: 0 4px 15px rgba(229, 9, 20, 0.3);
+    }
+
+    /* CARDS GRID */
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 25px;
+    }
+
+    /* CLASSY CARD DESIGN */
+    .card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.7);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .card-img-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/10;
+      overflow: hidden;
+      background: #111;
+    }
+
+    .card-img-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .card:hover .card-img-wrapper img {
+      transform: scale(1.08);
+    }
+
+    .badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: #00e676;
+      color: #000;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    .card-body {
+      padding: 15px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-artist {
+      color: #888;
+      font-size: 12px;
+      margin-bottom: 15px;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 8px 0;
+      border: none;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-play {
+      background: #ffffff;
+      color: #000;
+    }
+
+    .btn-play:hover {
+      background: #e0e0e0;
+    }
+
+    .btn-download {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .btn-download:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <h1 class="logo">IZENGOFLIX</h1>
+    <p class="subtitle">Movies & Music | Bongo to the World</p>
+  </header>
+
+  <!-- MAIN NAVIGATION TABS -->
+  <nav class="main-tabs">
+    <button class="tab-btn" onclick="switchTab('movies')">🎬 MOVIES</button>
+    <button class="tab-btn active" onclick="switchTab('music')">🎵 MUSIC</button>
+  </nav>
+
+  <!-- MUSIC PANEL -->
+  <section id="music" class="panel active">
+    <!-- Sub Categories -->
+    <div class="sub-categories">
+      <button class="pill active">All Music</button>
+      <button class="pill">🇹🇿 Bongo Fleva</button>
+      <button class="pill">🌍 Africa</button>
+      <button class="pill">🌎 Ulaya</button>
+    </div>
+
+    <!-- Media Cards Grid -->
+    <div class="media-grid">
+      
+      <!-- Card Item 1 -->
+      <div class="card">
+        <div class="card-img-wrapper">
+          <span class="badge">NEW</span>
+          <img src="https://via.placeholder.com/400x250/111/fff?text=Diamond+Platnumz" alt="Cover">
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Mwanangu</h3>
+          <p class="card-artist">Diamond Platnumz | Bongo | 2026</p>
+          <div class="card-actions">
+            <button class="btn btn-play">▶ Play</button>
+            <button class="btn btn-download">⬇ Download</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Item 2 -->
+      <div class="card">
+        <div class="card-img-wrapper">
+          <img src="https://via.placeholder.com/400x250/111/fff?text=Harmonize" alt="Cover">
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Single Again</h3>
+          <p class="card-artist">Harmonize | Bongo | 2026</p>
+          <div class="card-actions">
+            <button class="btn btn-play">▶ Play</button>
+            <button class="btn btn-download">⬇ Download</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MOVIES PANEL -->
+  <section id="movies" class="panel">
+    <div class="sub-categories">
+      <button class="pill active">All Movies</button>
+      <button class="pill">Action</button>
+      <button class="pill">Swahili Movies</button>
+      <button class="pill">Series</button>
+    </div>
+
+    <div class="media-grid">
+      <div class="card">
+        <div class="card-img-wrapper">
+          <span class="badge">HD</span>
+          <img src="https://via.placeholder.com/400x250/111/fff?text=Action+Movie" alt="Cover">
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">The Legend</h3>
+          <p class="card-artist">Action / Thriller • 2h 15m</p>
+          <div class="card-actions">
+            <button class="btn btn-play">▶ Watch</button>
+            <button class="btn btn-download">⬇ Download</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JAVASCRIPT FOR TABS -->
+  <script>
+    function switchTab(tabName) {
+      // Hide all panels
+      document.querySelectorAll('.panel').forEach(panel => {
+        panel.classList.remove('active');
+      });
+      // Remove active class from buttons
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+
+      // Show selected panel & activate button
+      document.getElementById(tabName).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+  </script>
+
+</body>
+</html>
