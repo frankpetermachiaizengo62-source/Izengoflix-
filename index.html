@@ -2,25 +2,75 @@
 <html lang="sw">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IZENGOFLIX</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<title>IZENGOFLIX TEST</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: #000; color: white; font-family: 'Poppins', sans-serif; padding-bottom: 120px; }
-  header { text-align: center; padding: 50px 20px 30px; background: linear-gradient(180deg, rgba(229,9,20,0.1) 0%, #000 100%); }
-  .logo { font-family: 'Bebas Neue', sans-serif; font-size: 80px; letter-spacing: 8px; background: linear-gradient(90deg, #e50914, #ff4757); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .subtitle { color: #aaa; font-size: 15px; margin-top: 8px; letter-spacing: 2px; text-transform: uppercase; }
-  .main-tabs { display: flex; justify-content: center; background: #0a0a0a; border-bottom: 1px solid #222; position: sticky; top: 0; z-index: 10; }
-  .tab-btn { background: none; border: none; color: #666; font-size: 20px; font-weight: 700; padding: 20px 60px; cursor: pointer; transition: 0.3s; letter-spacing: 1px; }
-  .tab-btn.active { color: white; border-bottom: 3px solid #e50914; background: #111; }
-  .panel { display: none; padding: 40px 30px; max-width: 1500px; margin: auto; }
-  .panel.active { display: block; }
-  .filter-buttons { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 40px; justify-content: center; }
-  .filter-btn { background: #111; color: #bbb; border: 1px solid #333; padding: 12px 24px; border-radius: 30px; cursor: pointer; font-weight: 600; transition: 0.3s; }
-  .filter-btn.active, .filter-btn:hover { background: #e50914; color: white; border-color: #e50914; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 30px; }
-  .card { background: #111; border-radius: 15px; overflow: hidden; transition: 0.4s; border: 1px solid #1a1a1a; position: relative; }
-  .card:hover { transform: translateY(-10px); border-color: #e50914; box-shadow: 0 15px 40px rgba(229, 9, 20, 0.4); }
-  .card img { width: 100%; height: 350px;
+  body { background: #000; color: white; font-family: Arial; padding: 40px; text-align: center; }
+  .logo { font-size: 60px; color: #e50914; font-weight: bold; }
+  .box { background: #111; padding: 30px; border-radius: 10px; margin: 20px auto; max-width: 600px; border: 2px solid #e50914; }
+  .error { color: #ff4757; }
+  .success { color: #00ff88; }
+  button { background: #e50914; color: white; border: none; padding: 15px 30px; border-radius: 8px; font-size: 18px; cursor: pointer; margin: 10px; }
+</style>
+</head>
+<body>
+
+<div class="logo">IZENGOFLIX</div>
+<h2>TEST YA SUPABASE CONNECTION</h2>
+
+<div class="box">
+  <h3 id="status">Inajaribu kuunganisha...</h3>
+  <p id="details"></p>
+  <button onclick="loadSongs()">BONGEZA UPIMA TENA</button>
+  <button onclick="showPanel('music')">INGIA MUSIC</button>
+</div>
+
+<div id="musicPanel" style="display:none;">
+  <div id="musicGrid"></div>
+</div>
+
+<script>
+// ========= ⚠️ WEKA CREDENTIALS ZAKO HAPA =========
+const SUPABASE_URL = 'https://WEKA_YAKO_HAPA.supabase.co'; 
+const SUPABASE_ANON_KEY = 'WEKA_KEY_YAKO_KIRENGU_HAPA'; 
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+async function loadSongs() {
+  document.getElementById('status').innerHTML = "Inajaribu kuunganisha...";
+  document.getElementById('details').innerHTML = "";
+
+  if(SUPABASE_URL.includes('WEKA_YAKO')) {
+    document.getElementById('status').className = 'error';
+    document.getElementById('status').innerHTML = "❌ KOSA: HUJAWEKA KEYS";
+    document.getElementById('details').innerHTML = "Nenda line 33 na 34 uweke URL na KEY zako za kweli kutoka Supabase";
+    return;
+  }
+
+  const { data, error } = await supabase.from('songs').select('*');
+  
+  if(error) { 
+    document.getElementById('status').className = 'error';
+    document.getElementById('status').innerHTML = "❌ HAIKUUNGANISHWA";
+    document.getElementById('details').innerHTML = "Error: " + error.message + "<br><br> Suluhisho: 1. Angalia jina la table ni 'songs' 2. Nenda Supabase > SQL > run: `alter table songs enable row level security;` kisha `create policy 'Allow all' on songs for all using (true);`";
+    return; 
+  }
+  
+  document.getElementById('status').className = 'success';
+  document.getElementById('status').innerHTML = "✅ IMEUNGANISHWA! Nyimbo: " + data.length;
+  document.getElementById('details').innerHTML = JSON.stringify(data);
+  displaySongs(data);
+}
+
+function displaySongs(songs) {
+  document.getElementById('musicGrid').innerHTML = songs.map(s => `<p>${s.title} - ${s.artist}</p>`).join('');
+}
+
+function showPanel(p) {
+  document.getElementById('musicPanel').style.display = 'block';
+  loadSongs();
+}
+
+loadSongs(); // Ijaribu moja kwa moja
+</script>
+</body>
+</html>
